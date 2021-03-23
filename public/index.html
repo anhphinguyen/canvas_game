@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar</title>
+</head>
+
+<body>
+    <style>
+        #canvas {
+            background-color: #f0f0f0;
+            position: relative;
+            top: 25vh;
+            left: 25vw;
+        }
+    </style>
+    <canvas id="canvas">
+    </canvas>
+    <script>
+        var canWidth = 600;
+        var canHeight = 320;
+        var canvas = document.getElementById('canvas');
+        canvas.width = canWidth;
+        canvas.height = canHeight;
+        var ctx = canvas.getContext('2d');
+
+        var character = new Image();
+        character.src = "luffy.png";
+
+        class Luffy {
+            constructor() {
+                this.x = canWidth / 2;
+                this.y = canHeight / 2;
+                this.trick = 0;
+                this.srcX;
+                this.srcY;
+                this.sheetWidth = 200;
+                this.sheetHeight = 160;
+                this.cols = 5;
+                this.rows = 4;
+                this.width = this.sheetWidth / this.cols;
+                this.height = this.sheetHeight / this.rows;
+                this.speech = 8;
+                this.currentFrame = 0;
+
+            }
+
+            updateFrame() {
+                this.srcX = this.currentFrame * this.width;
+                this.currentFrame = ++this.currentFrame % this.cols;
+                this.srcY = this.trick * this.height;
+                ctx.clearRect(this.x, this.y, canvas.width, canvas.height);
+                ctx.clearRect(this.x - this.speech, this.y - this.speech, canvas.width, canvas.height);
+                ctx.clearRect(this.x + this.speech, this.y + this.speech, canvas.width, canvas.height);
+
+            }
+
+            drawImage() {
+                this.updateFrame();
+                ctx.drawImage(character, this.srcX, this.srcY, this.width, this.height, this.x, this.y, this.width, this.height);
+            }
+        }
+
+        const luffy = new Luffy();
+        setInterval(function() {
+            luffy.drawImage();
+        }, 200);
+
+        function move(e) {
+            if (e.keyCode == '37') {
+                luffy.trick = 1;
+                if (luffy.x > 3) {
+                    luffy.x -= luffy.speech;
+                }
+                luffy.drawImage();
+            }
+            if (e.keyCode == '39') {
+                luffy.trick = 2;
+                if (luffy.x < 559) {
+                    luffy.x += luffy.speech;
+                }
+                luffy.drawImage();
+            }
+            if (e.keyCode == '40') {
+
+                luffy.trick = 0;
+                if (luffy.y < 272) {
+                    luffy.y += luffy.speech;
+                }
+                luffy.drawImage();
+            }
+            if (e.keyCode == '38') {
+                luffy.trick = 3;
+                if (luffy.y > 8) {
+                    luffy.y -= luffy.speech;
+                }
+                luffy.drawImage();
+            }
+
+            console.log(e.keyCode);
+        }
+        document.onkeydown = move;
+    </script>
+</body>
+
+</html>
