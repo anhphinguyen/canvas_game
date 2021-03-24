@@ -63,11 +63,14 @@
                 ctx.drawImage(character, this.srcX, this.srcY, this.width, this.height, this.x, this.y, this.width, this.height);
             }
         }
+        
 
         const luffy = new Luffy();
         setInterval(function() {
             luffy.drawImage();
         }, 200);
+
+        
 
         function move(e) {
             if (e.keyCode == '37') {
